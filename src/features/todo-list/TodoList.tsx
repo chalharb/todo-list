@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { v4 as uuid } from 'uuid';
+import Label from '../../components/label/Label';
 import Todo from '../../components/todo/Todo';
 import Input from '../../components/input/Input';
 import TextArea from '../../components/input/TextArea';
@@ -18,7 +19,7 @@ const TodoList: React.FC = () => {
   const [description, setDescription] = useState<string>("");
 
   const handleAddTodo = (title: string, description: string) => {
-     dispatch(addTodo({
+    dispatch(addTodo({
       id: uuid(),
       title: title,
       description: description,
@@ -28,13 +29,13 @@ const TodoList: React.FC = () => {
 
   return (
     <div>
+      <Label labelFor="title">Title: </Label>
       <Input
-        label="Title:"
         value={title}
         onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setTitle(e.target.value)}
       />
+      <Label labelFor="description">Description: </Label>
       <TextArea
-        label="Description:"
         value={description}
         onChange={(e: React.ChangeEvent<HTMLTextAreaElement>): void => setDescription(e.target.value)}
       />
