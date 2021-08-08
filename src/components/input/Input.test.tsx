@@ -17,17 +17,17 @@ const setup = () => {
 }
 
 test('It should render an input field', () => {
-  const {input} = setup();
+  const { input } = setup();
   expect(input).toBeInTheDocument();
 });
 
 test('It should render an input field with an initial value', () => {
-  const {input} = setup();
+  const { input } = setup();
   expect(input.value).toBe('Testing');
 });
 
 test('It should render an input field and update value', () => {
-  const {input} = setup();
-  fireEvent.change(input, {target: {value: 'Updated text'}});
+  const { input } = setup();
+  fireEvent.change(input, { target: { value: 'Updated text' } });
   expect(input.value).toBe('Updated text');
 });
