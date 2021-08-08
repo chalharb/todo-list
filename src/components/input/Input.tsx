@@ -12,9 +12,7 @@ const Input: React.FC<InputProps> = ({
 }) => {
 
   return (
-    <>
-      <input type="text" value={value} onChange={onChange}/>
-    </>
+    <input type="text" value={value} onChange={onChange}/>
   );
 };
 
