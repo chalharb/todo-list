@@ -1,58 +1,60 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 import { v4 as uuid } from 'uuid';
-import TodoProps from '../../components/todo/model';
 
-export interface TodoListState {
-  todos: Array<TodoProps>;
+type filterTypes = 'All' | 'Active' | 'Completed';
+
+interface Todo {
+  id: string;
+  title: string;
+  done: boolean;
 }
 
-const initialState: Array<TodoProps> = [
-  {
-    id: uuid(),
-    title: 'Test 1',
-    description: 'Lorem Ipsum dolor sit...',
-    done: true
-  },
-  {
-    id: uuid(),
-    title: 'Test 2',
-    description: 'Lorem Ipsum dolor sit...',
-    done: true
-  },
-];
+interface TodoListState {
+  todoFilter: filterTypes;
+  todos: Array<Todo>;
+}
+
+const initialState = {
+  todoFilter: 'All',
+  todos: [
+    {
+      id: uuid(),
+      title: 'Do the laundry',
+      done: true,
+    },
+    {
+      id: uuid(),
+      title: 'Take out the trash',
+      done: false,
+    },
+  ]
+} as TodoListState
 
 export const todoListSlice = createSlice({
   name: 'todoList',
   initialState,
   reducers: {
-    addTodo: (state, action: PayloadAction<TodoProps>) => {
-      state.push(action.payload);
+    updateFilter(state, action: PayloadAction<filterTypes>) {
+      state.todoFilter = action.payload;
     },
-    deleteTodo: (state, action: PayloadAction<TodoProps>) => {
-      console.log('here')
-      return state.filter(todo => todo.id !== action.payload.id)
+    addTodo: (state, action: PayloadAction<Todo>) => {
+      state.todos.push(action.payload);
     },
-    updateTodo: (state, action: PayloadAction<TodoProps>) => {
-      return state.map(item => {
-        if (item.title === action.payload.title) {
-          return {
-            ...item,
-            title: action.payload.title,
-            description: action.payload.description,
-            done: action.payload.done,
-          };
-        }
-
-        return item;
-      });
+    deleteTodo: (state, action: PayloadAction<Todo>) => {
+      state.todos = [...state.todos.filter(todo => todo.id !== action.payload.id)];
     },
   },
 });
 
-export const { addTodo, deleteTodo, updateTodo } = todoListSlice.actions;
+export const { updateFilter, addTodo, deleteTodo } = todoListSlice.actions;
+
 export const selectTodos = (state: RootState) => {
-  return [...state.todos];
-}
+  return [...state.todoList.todos];
+};
+
+export const selectFilter = (state: RootState) => {
+  return state.todoList.todoFilter
+};
 
 export default todoListSlice.reducer;
