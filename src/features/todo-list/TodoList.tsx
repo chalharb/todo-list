@@ -1,57 +1,65 @@
-import React, { useState } from 'react';
-import { v4 as uuid } from 'uuid';
-import Todo from '../../components/todo/Todo';
-import Input from '../../components/input/Input';
-import TextArea from '../../components/input/TextArea';
-import Button from '../../components/button/Button';
+import React from 'react';
+import { StyledHeading, StyledTaskList, StyledTaskStatus, StyledTaskItem, StyledTaskTitle, StyledTaskDelete, StyledTaskItemCompleted } from './styled';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import {
-  addTodo,
   deleteTodo,
   selectTodos,
 } from './todoListSlice';
 
+import TodoForm from '../../components/todoForm/TodoForm';
+import TodoToolbar from '../../components/todoToolbar/TodoToolbar';
+
+interface Todo {
+  id: string;
+  title: string;
+  done: boolean;
+}
+
+interface TodoItem {
+  todo: Todo;
+}
+
 const TodoList: React.FC = () => {
   const dispatch = useAppDispatch();
   const todos = useAppSelector(selectTodos);
-  const [title, setTitle] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
+  let date = new Date();
 
-  const handleAddTodo = (title: string, description: string) => {
-     dispatch(addTodo({
-      id: uuid(),
-      title: title,
-      description: description,
-      done: false
-    }))
+  const TodoItem: React.FC<TodoItem> = ({
+    todo,
+  }) => {
+
+    if (todo.done) {
+      return (
+        <StyledTaskItemCompleted>
+              <StyledTaskStatus type="checkbox" />
+              <StyledTaskTitle>{todo.title}</StyledTaskTitle>
+              <StyledTaskDelete onClick={() => dispatch(deleteTodo(todo))} aria-label="Delete task"></StyledTaskDelete>
+            </StyledTaskItemCompleted>
+      )
+    }
+
+    return (
+      <StyledTaskItem key={todo.id}>
+        <StyledTaskStatus type="checkbox" />
+        <StyledTaskTitle>{todo.title}</StyledTaskTitle>
+        <StyledTaskDelete onClick={() => dispatch(deleteTodo(todo))} aria-label="Delete task"></StyledTaskDelete>
+      </StyledTaskItem>
+    )
   }
 
   return (
-    <div>
-      <Input
-        label="Title:"
-        value={title}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setTitle(e.target.value)}
-      />
-      <TextArea
-        label="Description:"
-        value={description}
-        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>): void => setDescription(e.target.value)}
-      />
-      <Button onClick={() => handleAddTodo(title, description)}>Create Todo</Button>
+    <>
+        <StyledHeading>{date.toDateString()}</StyledHeading>
+        <TodoToolbar/>
+        <TodoForm/>
 
-      {todos.map(todo =>
-        <Todo
-          key={todo.id}
-          id={todo.id}
-          title={todo.title}
-          description={todo.description}
-          done={todo.done}
-          deleteClick={() => dispatch(deleteTodo(todo))}
-        />
-      )}
-    </div>
-  );
-};
+      <StyledTaskList>
+        {todos.map(todo =>
+          <TodoItem key={todo.id} todo={todo}/>
+        )}
+      </StyledTaskList>
+    </>
+  )
+}
 
 export default TodoList;
