@@ -1,13 +1,21 @@
 import React from 'react';
-import { StyledHeading, StyledTaskList, StyledTaskStatus, StyledTaskItem, StyledTaskTitle, StyledTaskDelete, StyledTaskItemCompleted } from './styled';
+
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
-import {
-  deleteTodo,
-  selectTodos,
-} from './todoListSlice';
+import { deleteTodo, selectTodos } from './todoListSlice';
 
 import TodoForm from '../../components/todoForm/TodoForm';
 import TodoToolbar from '../../components/todoToolbar/TodoToolbar';
+
+import {
+  StyledHeading,
+  StyledSubHeading,
+  StyledTaskList,
+  StyledTaskStatus,
+  StyledTaskItem,
+  StyledTaskTitle,
+  StyledTaskDelete,
+  StyledTaskItemCompleted
+} from './styled';
 
 interface Todo {
   id: string;
@@ -31,10 +39,10 @@ const TodoList: React.FC = () => {
     if (todo.done) {
       return (
         <StyledTaskItemCompleted>
-              <StyledTaskStatus type="checkbox" />
-              <StyledTaskTitle>{todo.title}</StyledTaskTitle>
-              <StyledTaskDelete onClick={() => dispatch(deleteTodo(todo))} aria-label="Delete task"></StyledTaskDelete>
-            </StyledTaskItemCompleted>
+          <StyledTaskStatus type="checkbox" />
+          <StyledTaskTitle>{todo.title}</StyledTaskTitle>
+          <StyledTaskDelete onClick={() => dispatch(deleteTodo(todo))} aria-label="Delete task"></StyledTaskDelete>
+        </StyledTaskItemCompleted>
       )
     }
 
@@ -49,13 +57,14 @@ const TodoList: React.FC = () => {
 
   return (
     <>
-        <StyledHeading>{date.toDateString()}</StyledHeading>
-        <TodoToolbar/>
-        <TodoForm/>
+      <StyledHeading>Todo List</StyledHeading>
+      <StyledSubHeading>{date.toDateString()}</StyledSubHeading>
+      <TodoToolbar />
+      <TodoForm />
 
       <StyledTaskList>
         {todos.map(todo =>
-          <TodoItem key={todo.id} todo={todo}/>
+          <TodoItem key={todo.id} todo={todo} />
         )}
       </StyledTaskList>
     </>
