@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 import { useAppDispatch } from '../../app/hooks';
 import {
   addTodo,
-} from '../../features/todo-list/todoListSlice';
+} from '../../features/todolist/todoListSlice';
 
 import {
   StyledForm,

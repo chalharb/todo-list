@@ -4,7 +4,7 @@ import {
   selectTodos,
   selectFilter,
   updateFilter,
-} from '../../features/todo-list/todoListSlice';
+} from '../../features/todolist/todoListSlice';
 
 import {
   StyledToolbar,
