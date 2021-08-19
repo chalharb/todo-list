@@ -1,15 +1,29 @@
 import { createSlice, PayloadAction, nanoid } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 
+type filterTypes = 'All' | 'Active' | 'Completed';
+
 export interface Todo {
   id: string;
-  text: string;
-  completed: boolean;
+  title: string;
+  done: boolean;
 }
 
-export type TodoListState = Array<Todo>;
+export interface TodoListState {
+  filter: filterTypes;
+  todos: Array<Todo>;
+}
 
-const initialState: Array<Todo> = [];
+const initialState: TodoListState = {
+  todoFilter: 'All',
+  todos: [
+    {
+      id: '4d90c13d-54d2-44a9-a474-054a725ad2b6',
+      title: 'Do the laundry',
+      done: true,
+    },
+  ]
+};
 
 export const todoListSlice = createSlice({
   name: 'todoList',
