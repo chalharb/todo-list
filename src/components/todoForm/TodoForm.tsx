@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { v4 as uuid } from 'uuid';
 import { useAppDispatch } from '../../app/hooks';
 import {
   createTodo,

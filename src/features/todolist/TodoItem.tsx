@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
-import { deleteTodo, completeTodo, selectTodos } from './todoListSlice';
+import { useAppDispatch } from '../../app/hooks';
+import { deleteTodo, completeTodo } from './todoListSlice';
 
 import {
   StyledTaskStatus,

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import React from 'react';
+import { useAppSelector } from '../../app/hooks';
 import {
   selectTodos,
 } from '../../features/todolist/todoListSlice';
@@ -8,7 +8,6 @@ import {
   StyledToolbar,
   StyledTodoCount,
   StyledFiltersWrapper,
-  StyledFilterActive,
   StyledFilter,
 } from './styled';
 
@@ -19,7 +18,6 @@ interface FilterButton {
 type filterTypes = 'All' | 'Active' | 'Completed';
 
 const TodoToolbar: React.FC = () => {
-  const dispatch = useAppDispatch();
   const todoCount = useAppSelector(selectTodos).length;
 
   let todoCountText = todoCount === 1 ? `${todoCount} task` : `${todoCount} tasks`;
