@@ -1,16 +1,14 @@
 import { createSlice, PayloadAction, nanoid } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 
-type filterTypes = 'All' | 'Active' | 'Completed';
-
 export interface Todo {
   id: string;
-  title: string;
-  done: boolean;
+  text: string;
+  completed: boolean;
 }
 
 export interface TodoListState {
-  filter: filterTypes;
+  todoFilter: 'All' | 'Active' | 'Completed';
   todos: Array<Todo>;
 }
 
@@ -19,8 +17,8 @@ const initialState: TodoListState = {
   todos: [
     {
       id: '4d90c13d-54d2-44a9-a474-054a725ad2b6',
-      title: 'Do the laundry',
-      done: true,
+      text: 'Do the laundry',
+      completed: true,
     },
   ]
 };
@@ -31,7 +29,7 @@ export const todoListSlice = createSlice({
   reducers: {
     createTodo: {
       reducer: (state, action: PayloadAction<Todo>) => {
-        state.push(action.payload)
+        state.todos.push(action.payload)
       },
       prepare: (text: string) => ({
         payload: {
@@ -42,12 +40,12 @@ export const todoListSlice = createSlice({
       })
     },
     completeTodo: (state, action: PayloadAction<string>) => {
-      const index = state.findIndex((todo) => todo.id === action.payload);
-      state[index].completed = !state[index].completed;
+      const index = state.todos.findIndex((todo) => todo.id === action.payload);
+      state.todos[index].completed = !state.todos[index].completed;
     },
     deleteTodo: (state, action: PayloadAction<string>) => {
-      const index = state.findIndex((todo) => todo.id === action.payload);
-      state.splice(index, 1);
+      const index = state.todos.findIndex((todo) => todo.id === action.payload);
+      state.todos.splice(index, 1);
     }
   },
 });
@@ -55,7 +53,7 @@ export const todoListSlice = createSlice({
 export const { createTodo, completeTodo, deleteTodo } = todoListSlice.actions;
 
 export const selectTodos = (state: RootState) => {
-  return [...state.todoList];
+  return [...state.todoList.todos];
 };
 
 export default todoListSlice.reducer;
