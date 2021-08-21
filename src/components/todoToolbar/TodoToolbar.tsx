@@ -1,68 +1,34 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
-import {
-  selectTodos,
-  selectFilter,
-  updateFilter,
-} from '../../features/todolist/todoListSlice';
-
-import {
-  StyledToolbar,
-  StyledTodoCount,
-  StyledFiltersWrapper,
-  StyledFilterActive,
-  StyledFilter,
-} from './styled';
-
-interface FilterButton {
-  text: filterTypes;
-}
-
-type filterTypes = 'All' | 'Active' | 'Completed';
+import { TodoFilterType, updateTodoFilter, selectTodos, selectTodoFilter } from '../../features/todolist/todoListSlice';
+import { StyledToolbar, StyledTodoCount } from './styled';
+import { HorizontalNav, HorizontalNavItem } from '../horizontalNav';
+import Pill from '../pill';
 
 const TodoToolbar: React.FC = () => {
   const dispatch = useAppDispatch();
   const todoCount = useAppSelector(selectTodos).length;
-  const todoFilterState = useAppSelector(selectFilter);
-  const [todoFilter, setTodoFilter] = useState<string>(todoFilterState);
+  const todoFilter = useAppSelector(selectTodoFilter);
+  const todoCountText = todoCount === 1 ? `${todoCount} task` : `${todoCount} tasks`;
 
-  let todoCountText = todoCount === 1 ? `${todoCount} task` : `${todoCount} tasks`;
-
-  const handleFilterClick = (text: filterTypes) => {
-    setTodoFilter(text);
-    dispatch(updateFilter(text));
-  }
-
-  const FilterButton: React.FC<FilterButton> = ({
-    text,
-  }) => {
-
-    if (todoFilter === text) {
-      return (
-        <StyledFilterActive
-          onClick={() => handleFilterClick(text)}
-        >
-          {text}
-        </StyledFilterActive>
-      )
-    }
-
-    return (
-      <StyledFilter
-        onClick={() => handleFilterClick(text)}>
-          {text}
-      </StyledFilter>
-    )
+  const handleFilterUpdate = (filter: TodoFilterType) => {
+    dispatch(updateTodoFilter(filter));
   }
 
   return (
     <StyledToolbar>
       <StyledTodoCount>{todoCountText}</StyledTodoCount>
-      <StyledFiltersWrapper>
-        <FilterButton text="All"/>
-        <FilterButton text="Active"/>
-        <FilterButton text="Completed"/>
-      </StyledFiltersWrapper>
+      <HorizontalNav>
+        <HorizontalNavItem>
+          <Pill text="All" active={todoFilter === 'All'} onClick={() => handleFilterUpdate('All')} />
+        </HorizontalNavItem>
+        <HorizontalNavItem>
+          <Pill text="Active" active={todoFilter === 'Active'} onClick={() => handleFilterUpdate('Active')} />
+        </HorizontalNavItem>
+        <HorizontalNavItem>
+          <Pill text="Completed" active={todoFilter === 'Completed'} onClick={() => handleFilterUpdate('Completed')} />
+        </HorizontalNavItem>
+      </HorizontalNav>
     </StyledToolbar>
   );
 };

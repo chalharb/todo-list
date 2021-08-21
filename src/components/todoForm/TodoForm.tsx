@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { v4 as uuid } from 'uuid';
 import { useAppDispatch } from '../../app/hooks';
 import {
-  addTodo,
+  createTodo,
 } from '../../features/todolist/todoListSlice';
 
 import {
@@ -13,23 +12,19 @@ import {
 
 const TodoForm: React.FC = () => {
   const dispatch = useAppDispatch();
-  const [title, setTitle] = useState<string>("");
+  const [text, setText] = useState<string>("");
 
   const handleFormSubmission = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    dispatch(addTodo({
-      id: uuid(),
-      title: title,
-      done: false
-    }));
+    dispatch(createTodo(text));
 
-    setTitle('');
+    setText('');
   }
 
   return (
     <StyledForm onSubmit={(e) => handleFormSubmission(e)}>
-      <StyledFormInput placeholder="Add a new task..." onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setTitle(e.target.value)} value={title} />
+      <StyledFormInput placeholder="Add a new task..." onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setText(e.target.value)} value={text} />
       <StyledFormButton>Add Task</StyledFormButton>
     </StyledForm>
   );
