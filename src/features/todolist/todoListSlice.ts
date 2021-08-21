@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction, nanoid } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 
+export type TodoFilterType = 'All' | 'Active' | 'Completed';
 export interface Todo {
   id: string;
   text: string;
@@ -8,7 +9,7 @@ export interface Todo {
 }
 
 export interface TodoListState {
-  todoFilter: 'All' | 'Active' | 'Completed';
+  todoFilter: TodoFilterType;
   todos: Array<Todo>;
 }
 
@@ -46,14 +47,21 @@ export const todoListSlice = createSlice({
     deleteTodo: (state, action: PayloadAction<string>) => {
       const index = state.todos.findIndex((todo) => todo.id === action.payload);
       state.todos.splice(index, 1);
-    }
+    },
+    updateTodoFilter: (state, action: PayloadAction<TodoFilterType>) => {
+      state.todoFilter = action.payload;
+    },
   },
 });
 
-export const { createTodo, completeTodo, deleteTodo } = todoListSlice.actions;
+export const { createTodo, completeTodo, deleteTodo, updateTodoFilter } = todoListSlice.actions;
 
 export const selectTodos = (state: RootState) => {
   return [...state.todoList.todos];
 };
+
+export const selectTodoFilter = (state: RootState) => {
+  return state.todoList.todoFilter;
+}
 
 export default todoListSlice.reducer;
